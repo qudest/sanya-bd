@@ -1,12 +1,14 @@
 package ru.vsu.cs.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.vsu.cs.dto.SpecialityCreationDto;
 import ru.vsu.cs.dto.SpecialityDto;
+import ru.vsu.cs.dto.StudentDto;
 import ru.vsu.cs.service.FacultyService;
 import ru.vsu.cs.service.SpecialityService;
 
@@ -23,8 +25,14 @@ public class SpecialityController {
     }
 
     @GetMapping({"", "/"})
-    public String getAllSpecialities(Model model) {
-        model.addAttribute("specialities", specialityService.findAll());
+    public String getAllSpecialities(Model model,
+                                     @RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "20") int size) {
+        Page<SpecialityDto> specialityPage = specialityService.findAll(page, size);
+        model.addAttribute("specialities", specialityPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", specialityPage.getTotalPages());
+        model.addAttribute("totalItems", specialityPage.getTotalElements());
         return "specialities/index";
     }
 

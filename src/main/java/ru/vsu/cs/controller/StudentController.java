@@ -1,6 +1,7 @@
 package ru.vsu.cs.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,8 +24,14 @@ public class StudentController {
     }
 
     @GetMapping({"", "/"})
-    public String getAllStudents(Model model) {
-        model.addAttribute("students", studentService.findAll());
+    public String getAllStudents(Model model,
+                                 @RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "20") int size) {
+        Page<StudentDto> studentPage = studentService.findAll(page, size);
+        model.addAttribute("students", studentPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", studentPage.getTotalPages());
+        model.addAttribute("totalItems", studentPage.getTotalElements());
         return "students/index";
     }
 

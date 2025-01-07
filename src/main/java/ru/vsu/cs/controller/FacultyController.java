@@ -1,6 +1,7 @@
 package ru.vsu.cs.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,8 +27,14 @@ public class FacultyController {
     }
 
     @GetMapping({"", "/"})
-    public String getAllFaculties(Model model) {
-        model.addAttribute("faculties", facultyService.findAll());
+    public String getAllFaculties(Model model,
+                                  @RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "20") int size) {
+        Page<FacultyDto> facultyPage = facultyService.findAll(page, size);
+        model.addAttribute("faculties", facultyPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", facultyPage.getTotalPages());
+        model.addAttribute("totalItems", facultyPage.getTotalElements());
         return "faculties/index";
     }
 

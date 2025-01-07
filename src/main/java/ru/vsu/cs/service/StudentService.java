@@ -1,6 +1,9 @@
 package ru.vsu.cs.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.vsu.cs.dto.StudentCreationDto;
@@ -24,8 +27,9 @@ public class StudentService {
         this.specialityService = specialityService;
     }
 
-    public List<StudentDto> findAll() {
-        return mapper.toDto(studentRepository.findAll(Sort.by("id")));
+    public Page<StudentDto> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
+        return studentRepository.findAll(pageable).map(mapper::toDto);
     }
 
     public StudentDto findById(Long id) {
