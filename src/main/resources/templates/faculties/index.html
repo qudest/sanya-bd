@@ -17,6 +17,24 @@
     </div>
 
     <h1 class="text-center my-4">Faculties</h1>
+
+    <form method="get" action="/faculties" class="mb-3">
+        <div class="row">
+            <div class="col">
+                <select class="form-control" name="searchColumn">
+                    <option value="name" th:selected="${searchColumn == 'name'}">Name</option>
+                    <option value="description" th:selected="${searchColumn == 'description'}">Description</option>
+                </select>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" name="searchValue" placeholder="Search" th:value="${searchValue}">
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
+
     <a class="btn btn-primary" href="/faculties/create">Create</a>
 
     <p>Total items: <span th:text="${totalItems}"></span></p>
@@ -47,10 +65,10 @@
 <nav aria-label="Page navigation" th:if="${totalPages > 0}">
     <ul class="pagination justify-content-center">
         <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-            <a class="page-link" th:href="@{/faculties(page=${currentPage - 1}, size=${size})}">Previous</a>
+            <a class="page-link" th:href="@{/faculties(page=${currentPage - 1}, size=${size}, searchColumn=${searchColumn}, searchValue=${searchValue})}">Previous</a>
         </li>
         <li class="page-item" th:if="${currentPage > 2}">
-            <a class="page-link" th:href="@{/faculties(page=0, size=${size})}">1</a>
+            <a class="page-link" th:href="@{/faculties(page=0, size=${size}, searchColumn=${searchColumn}, searchValue=${searchValue})}">1</a>
         </li>
         <li class="page-item" th:if="${currentPage > 3}">
             <span class="page-link">...</span>
@@ -58,16 +76,16 @@
         <li class="page-item" th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}"
             th:if="${i >= 0} and ${i < totalPages}"
             th:classappend="${i == currentPage} ? 'active'">
-            <a class="page-link" th:href="@{/faculties(page=${i}, size=${size})}" th:text="${i + 1}">1</a>
+            <a class="page-link" th:href="@{/faculties(page=${i}, size=${size}, searchColumn=${searchColumn}, searchValue=${searchValue})}" th:text="${i + 1}">1</a>
         </li>
         <li class="page-item" th:if="${currentPage < totalPages - 4}">
             <span class="page-link">...</span>
         </li>
         <li class="page-item" th:if="${currentPage < totalPages - 3}">
-            <a class="page-link" th:href="@{/faculties(page=${totalPages - 1}, size=${size})}" th:text="${totalPages}">1</a>
+            <a class="page-link" th:href="@{/faculties(page=${totalPages - 1}, size=${size}, searchColumn=${searchColumn}, searchValue=${searchValue})}" th:text="${totalPages}">1</a>
         </li>
         <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
-            <a class="page-link" th:href="@{/faculties(page=${currentPage + 1}, size=${size})}">Next</a>
+            <a class="page-link" th:href="@{/faculties(page=${currentPage + 1}, size=${size}, searchColumn=${searchColumn}, searchValue=${searchValue})}">Next</a>
         </li>
     </ul>
 </nav>

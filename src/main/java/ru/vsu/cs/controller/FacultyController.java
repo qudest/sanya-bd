@@ -29,12 +29,17 @@ public class FacultyController {
     @GetMapping({"", "/"})
     public String getAllFaculties(Model model,
                                   @RequestParam(defaultValue = "0") int page,
-                                  @RequestParam(defaultValue = "20") int size) {
-        Page<FacultyDto> facultyPage = facultyService.findAll(page, size);
+                                  @RequestParam(defaultValue = "20") int size,
+                                  @RequestParam(required = false) String searchValue,
+                                  @RequestParam(required = false) String searchColumn
+    ) {
+        Page<FacultyDto> facultyPage = facultyService.findAll(page, size, searchValue, searchColumn);
         model.addAttribute("faculties", facultyPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", facultyPage.getTotalPages());
         model.addAttribute("totalItems", facultyPage.getTotalElements());
+        model.addAttribute("searchValue", searchValue);
+        model.addAttribute("searchColumn", searchColumn);
         return "faculties/index";
     }
 

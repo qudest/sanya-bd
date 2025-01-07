@@ -26,12 +26,17 @@ public class StudentController {
     @GetMapping({"", "/"})
     public String getAllStudents(Model model,
                                  @RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "20") int size) {
-        Page<StudentDto> studentPage = studentService.findAll(page, size);
+                                 @RequestParam(defaultValue = "20") int size,
+                                 @RequestParam(required = false) String searchValue,
+                                 @RequestParam(required = false) String searchColumn
+    ) {
+        Page<StudentDto> studentPage = studentService.findAll(page, size, searchValue, searchColumn);
         model.addAttribute("students", studentPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", studentPage.getTotalPages());
         model.addAttribute("totalItems", studentPage.getTotalElements());
+        model.addAttribute("searchValue", searchValue);
+        model.addAttribute("searchColumn", searchColumn);
         return "students/index";
     }
 

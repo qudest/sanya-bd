@@ -27,9 +27,9 @@ public class StudentService {
         this.specialityService = specialityService;
     }
 
-    public Page<StudentDto> findAll(int page, int size) {
+    public Page<StudentDto> findAll(int page, int size, String searchValue, String searchColumn) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
-        return studentRepository.findAll(pageable).map(mapper::toDto);
+        return studentRepository.findAllWithFilters(searchValue, searchColumn, pageable).map(mapper::toDto);
     }
 
     public StudentDto findById(Long id) {

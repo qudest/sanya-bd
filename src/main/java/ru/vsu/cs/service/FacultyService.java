@@ -24,9 +24,9 @@ public class FacultyService {
         this.facultyRepository = facultyRepository;
     }
 
-    public Page<FacultyDto> findAll(int page, int size) {
+    public Page<FacultyDto> findAll(int page, int size, String searchValue, String searchColumn) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
-        return facultyRepository.findAll(pageable).map(mapper::toDto);
+        return facultyRepository.findAllWithFilters(searchValue, searchColumn, pageable).map(mapper::toDto);
     }
 
     public List<FacultyDto> findAll() {

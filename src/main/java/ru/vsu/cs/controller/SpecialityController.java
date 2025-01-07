@@ -27,12 +27,17 @@ public class SpecialityController {
     @GetMapping({"", "/"})
     public String getAllSpecialities(Model model,
                                      @RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "20") int size) {
-        Page<SpecialityDto> specialityPage = specialityService.findAll(page, size);
+                                     @RequestParam(defaultValue = "20") int size,
+                                     @RequestParam(required = false) String searchValue,
+                                     @RequestParam(required = false) String searchColumn
+    ) {
+        Page<SpecialityDto> specialityPage = specialityService.findAll(page, size, searchValue, searchColumn);
         model.addAttribute("specialities", specialityPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", specialityPage.getTotalPages());
         model.addAttribute("totalItems", specialityPage.getTotalElements());
+        model.addAttribute("searchValue", searchValue);
+        model.addAttribute("searchColumn", searchColumn);
         return "specialities/index";
     }
 
